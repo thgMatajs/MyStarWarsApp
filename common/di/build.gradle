@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'com.gentalha.characters'
+    namespace 'com.gentalha.di'
     compileSdk 33
 
     defaultConfig {
@@ -28,23 +28,15 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    buildFeatures {
-        compose true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion '1.2.0'
-    }
 }
 
 dependencies {
-
-    implementation project(":common:theme")
+    implementation project(":feature:characters")
     implementation project(":common:config")
 
     implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
-    implementation 'androidx.activity:activity-compose:1.3.1'
-    implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation 'androidx.compose.material3:material3:1.0.0-alpha11'
+
+    implementation "org.koin:koin-core:2.1.5"
+    implementation "org.koin:koin-android:2.1.5"
+    implementation "org.koin:koin-androidx-viewmodel:2.1.5"
 }
