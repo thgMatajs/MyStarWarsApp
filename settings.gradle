@@ -16,3 +16,4 @@ rootProject.name = "MyStarWarsApp"
 include ':app'
 include ':common:theme'
 include ':feature:characters'
+include ':common:config'
