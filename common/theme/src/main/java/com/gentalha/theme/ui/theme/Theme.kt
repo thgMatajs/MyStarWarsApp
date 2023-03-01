@@ -1,4 +1,4 @@
-package com.gentalha.mystarwarsapp.ui.theme
+package com.gentalha.theme.ui.theme
 
 import android.app.Activity
 import android.os.Build
