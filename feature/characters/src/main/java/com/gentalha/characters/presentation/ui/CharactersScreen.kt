@@ -3,12 +3,10 @@ package com.gentalha.characters.presentation.ui
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -30,7 +28,7 @@ import com.gentalha.characters.presentation.model.Character
 
 @ExperimentalMaterial3Api
 @Composable
-fun CharactersScreen(viewModel: CharacterViewModel) {
+fun CharactersScreen(viewModel: CharacterViewModel, selectedOnClick: (id: Int) -> Unit) {
     val characters = viewModel.getCharacters().collectAsLazyPagingItems()
 
     LazyColumn(
@@ -39,11 +37,10 @@ fun CharactersScreen(viewModel: CharacterViewModel) {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        when (val state = characters.loadState.prepend) {
-            LoadState.Loading -> Loading()
-            is LoadState.NotLoading -> Unit
-            is LoadState.Error ->  ShowError(state.error.message ?: "")
-
+        items(items = characters) {
+            it?.let {
+                CharacterItem(character = it) { selectedOnClick.invoke(it) }
+            }
         }
         when (val state = characters.loadState.refresh) {
             is LoadState.Error -> ShowError(state.error.message ?: "")
@@ -55,11 +52,6 @@ fun CharactersScreen(viewModel: CharacterViewModel) {
             LoadState.Loading -> Loading()
             is LoadState.NotLoading -> Unit
         }
-        items(items = characters) {
-            it?.let {
-                CharacterItem(character = it)
-            }
-        }
 
     }
 }
@@ -67,42 +59,42 @@ fun CharactersScreen(viewModel: CharacterViewModel) {
 @ExperimentalMaterial3Api
 @Composable
 fun CharacterItem(
-    character: Character
+    character: Character,
+    selectedOnClick: (id: Int) -> Unit
 ) {
     Spacer(modifier = Modifier.height(8.dp))
     ElevatedCard(
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(16.dp),
+        onClick = { selectedOnClick.invoke(character.id) }
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImage(
                 model = character.imgUrl,
                 contentDescription = character.name,
-                modifier = Modifier.fillMaxHeight().padding(end = 8.dp)
+                modifier = Modifier
+                    .height(115.dp)
+                    .padding(end = 8.dp)
             )
             Spacer(modifier = Modifier.height(8.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = character.name,
-                    style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 4.dp)
                 )
                 Text(
                     text = character.gender,
-                    style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 4.dp)
                 )
                 Text(
                     text = character.birthYear,
-                    style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 4.dp)

@@ -8,7 +8,7 @@ data class Character(
     val birthYear: String,
     val gender: String
 ) {
-    val id = url.replace("\\D".toRegex(), "")
+    val id = url.replace("\\D".toRegex(), "").toInt()
 
     val imgUrl = "https://starwars-visualguide.com/assets/img/characters/$id.jpg"
 }

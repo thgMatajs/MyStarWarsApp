@@ -4,11 +4,9 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.gentalha.characters.remote.model.CharacterResponse
 import com.gentalha.characters.remote.service.CharacterApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-private const val DEFAULT_PAGE_SIZE = 20
+private const val DEFAULT_PAGE_SIZE = 10
 
 class CharacterRepository @Inject constructor(
     private val api: CharacterApi
@@ -19,7 +17,5 @@ class CharacterRepository @Inject constructor(
         pagingSourceFactory = { CharacterPagingSource(api) }
     ).flow
 
-    fun getCharacterDetail(url: String): Flow<CharacterResponse> = flow {
-        emit(api.getCharacterDetail(url))
-    }
+    suspend fun getCharacterDetail(id: Int): CharacterResponse = api.getCharacterDetail(id)
 }
